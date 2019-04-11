@@ -1,0 +1,33 @@
+_offlimits
+  php
+    config.php
+prep
+  drop_tables.sql
+  create_tables.sql
+  create_tables.php
+backend
+  common
+    f.php
+    validate.php
+  prep
+    config_template.php
+    drop_tables.sql
+    create_tables.sql
+    create_tables.php
+    sftp_template.json
+frontend
+  common
+    config.js
+    f.js
+ruminations
+  brainstorm.txt
+  entities.txt
+  steps.txt
+  structure.txt
+  tasks.txt
+api
+gonnabe.txt
+index.html
+style.css
+script.js
+sketches.xd

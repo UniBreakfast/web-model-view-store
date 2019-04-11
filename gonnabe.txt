@@ -1,0 +1,5 @@
+This is going to be a simple page for the development of View/DataModel/Storage interaction routine
+
+  At first in should only have three objects illustrating View, DataModel, StorageClerk
+
+    Each object have to be able to contain changeable data and to push/pull data to/from the other parties involved.
