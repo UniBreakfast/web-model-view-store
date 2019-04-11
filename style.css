@@ -47,8 +47,6 @@ input {
 [for=model] { color: var(--model) }
 [for=store] { color: var(--store) }
 
-
-/*
 button, .btn {
   font: var(--font);
   margin: 1.25rem 0;
@@ -61,7 +59,10 @@ button, .btn {
   display: inline-block;
   border: 0;
   cursor: pointer;
+  background: var(--view);
 }
+
+/*
 
 #alertbox {
   display: none;
