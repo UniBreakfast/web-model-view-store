@@ -21,7 +21,6 @@ body {
 #cont {
   display: grid;
   grid-template-columns: auto;
-  gap: 1rem;
   justify-items: center;
   align-items: center;
 }
@@ -58,7 +57,7 @@ button, .btn {
   display: none;
 }
 
-#store, #view {
+#view, #model, #store {
   max-height: 30vh;
   overflow: auto;
   border-radius: .3rem;
@@ -67,7 +66,13 @@ button, .btn {
 ::-webkit-scrollbar {
   width: .4rem;
 }
+#model {
+  font-size: .8rem;
+  margin: 0;
+  /* max-height: 15vh; */
+}
 #view::-webkit-scrollbar-thumb  { background: var(--view)  }
+#model::-webkit-scrollbar-thumb { background: var(--model) }
 #store::-webkit-scrollbar-thumb { background: var(--store) }
 
 #view  { border-color: var(--view)  }
