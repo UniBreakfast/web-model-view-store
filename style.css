@@ -107,3 +107,18 @@ button, .btn {
   border: 2px solid lightgray;
 }
  */
+ #view td {
+     padding: 15px;
+ }
+#view thead th{
+    padding: 10px;
+    vertical-align: middle;
+    background-color: lightgrey;
+    border-bottom: 1px solid darkgray;
+}
+#view tbody tr:nth-child(odd) {
+    background-color: #fff5;
+}
+#view tbody tr:nth-child(even) {
+    background-color: #0001;
+}
