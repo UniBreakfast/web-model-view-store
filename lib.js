@@ -10,7 +10,8 @@ v = {
 m = {
   setClerk(clerk) { this.clerk = clerk },
   fetch() { this.json = this.clerk.fetch() },
-  parse() { this.data = JSON.parse(this.json) }
+  parse() { this.data = JSON.parse(this.json) },
+  load() { }
 }
 c = {
   setDB(db) { this.db = db },

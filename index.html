@@ -10,52 +10,27 @@
 </head>
 <body>
 
-  <button id=refresh> refresh now </button>
   <div id=cont>
     <label for=view>in View:</label>
-    <div id=view>
-      <table id=viewtbl>
-        <thead>
+    <div style=display:flex>
+      <div id=view>
+        <table id=viewtbl>
+          <thead>
             <tr>
-                <th>name</th>
-                <th>age</th>
-                <th>word</th>
-                <th>score</th>
+              <th>name</th>
+              <th>age</th>
+              <th>word</th>
+              <th>score</th>
             </tr>
-        </thead>
-        <tbody>
-          <tr>
-              <td>Theodore Black</td>
-              <td>37</td>
-              <td>sdasdas</td>
-              <td>2500</td>
-          </tr>
-          <tr>
-              <td>Theodore Black</td>
-              <td>37</td>
-              <td>sdasdas</td>
-              <td>2500</td>
-          </tr>
-          <tr>
-              <td>Theodore Black</td>
-              <td>37</td>
-              <td>sdasdas</td>
-              <td>2500</td>
-          </tr>
-          <tr>
-              <td>Theodore Black</td>
-              <td>37</td>
-              <td>sdasdas</td>
-              <td>2500</td>
-          </tr>
-          <tr>
-              <td>Theodore Black</td>
-              <td>37</td>
-              <td>sdasdas</td>
-              <td>2500</td>
-          </tr>
-        </tbody>
-      </table>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <button id=refresh> refresh </button>
+        <button id=config> config </button>
+        <button id=add> add </button>
+      </div>
     </div>
     <label for=model>in Model:</label>
     <pre id=model>
@@ -73,6 +48,7 @@
     </div>
   </div>
   <script src=lib.js></script>
+  <script src=words.js></script>
   <script src=db.js></script>
   <script src=script.js></script>
 

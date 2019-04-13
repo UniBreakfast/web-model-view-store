@@ -40,21 +40,20 @@ input {
 
 button, .btn {
   font: var(--font);
-  margin: 1.25rem 0;
+  margin: 1rem;
   padding: .5rem;
   min-width: 15rem;
   border-radius: .3rem;
   color: white;
   text-decoration: none;
   text-align: center;
-  display: inline-block;
+  display: block;
   border: 0;
   cursor: pointer;
 }
 
-#refresh {
+#refresh, #config, #add {
   background: var(--view);
-  display: none;
 }
 
 #view, #model, #store {
@@ -69,7 +68,6 @@ button, .btn {
 #model {
   font-size: .8rem;
   margin: 0;
-  /* max-height: 15vh; */
 }
 #view::-webkit-scrollbar-thumb  { background: var(--view)  }
 #model::-webkit-scrollbar-thumb { background: var(--model) }
