@@ -10,7 +10,7 @@
 body {
   font: var(--font);
   margin: 0;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -20,7 +20,7 @@ body {
 
 #cont {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto;
   gap: 1rem;
   justify-items: center;
   align-items: center;
@@ -59,9 +59,27 @@ button, .btn {
   display: inline-block;
   border: 0;
   cursor: pointer;
-  background: var(--view);
 }
 
+#refresh {
+  background: var(--view);
+  display: none;
+}
+
+#store {
+  max-height: 30vh;
+  overflow: auto;
+}
+#dbview input {
+  font-size: .8rem;
+  width: 10rem;
+  border-color: lightgray;
+}
+#dbview td:nth-child(1)>input,
+#dbview td:nth-child(4)>input,
+#dbview td:nth-child(6)>input { width: 4rem }
+#dbview td:nth-child(2)>input,
+#dbview td:nth-child(3)>input { width: 6rem }
 /*
 
 #alertbox {
