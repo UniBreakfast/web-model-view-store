@@ -19,7 +19,13 @@ function showDB() {
 showDB();
 
 function dbCellChange() {
-  db.rows[[...this.parentElement.parentElement.parentElement.children].indexOf(this.parentElement.parentElement)][[...this.parentElement.parentElement.children].indexOf(this.parentElement)] = this.value
+  const row = [...this.parentNode.parentNode.parentNode.children]
+                .indexOf(this.parentNode.parentNode),
+        cell = [...this.parentNode.parentNode.children]
+                .indexOf(this.parentNode);
+  db.rows[row][cell] = this.value
+  this.parentNode.parentNode.children[7].children[0].value =
+    db.rows[row][7] = ISOdate(Date.now())
 }
 dbtbody.querySelectorAll('input').forEach(el=>el.onchange=dbCellChange)
 
