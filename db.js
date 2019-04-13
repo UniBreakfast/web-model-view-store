@@ -1,7 +1,7 @@
 function peopleGen() {
-  let firsts = ["John", "Jack", "Alex", "Maria", "Jessica", "Alice", "Teresa", "Monica", "Peter", "Oliver", "Claudia", "Theodore", "Chad", "Cole", "Valery", "Bert", "Tony"],
-  lasts = ["Smith", "Carter", "White", "Black", "Silver", "Taylor", "Jackson", "Kent", "Jones", "Walker", "Night", "Porter", "Butler", "Blanc", "Good", "Wood", "Ward", "Strong", "Bright"],
-  words = ["doggy", "flier", "boyscout", "tanker", "spaceship", "battleground", "groundhog", "smokescreen", "forester", "monkeys", "lightbulb", "bottleneck", "kangaroo", "marionette", "puppeteer", "flagstock", "sailor", "portrait", "direction", "sponsor", "fiancee", "impression", "inertia", 'pokerface', 'caterpillar', 'waterline', 'butterfly', 'healer'],
+  let firsts = ['John', 'Jack', 'Alex', 'Maria', 'Jessica', 'Alice', 'Teresa', 'Monica', 'Peter', 'Oliver', 'Claudia', 'Theodore', 'Chad', 'Cole', 'Valery', 'Bert', 'Tony'],
+  lasts = ['Smith', 'Carter', 'White', 'Black', 'Silver', 'Taylor', 'Jackson', 'Kent', 'Jones', 'Walker', 'Night', 'Porter', 'Butler', 'Blanc', 'Good', 'Wood', 'Ward', 'Strong', 'Bright'],
+  words = ['doggy', 'flier', 'boyscout', 'tanker', 'spaceship', 'battleground', 'groundhog', 'smokescreen', 'forester', 'monkeys', 'lightbulb', 'bottleneck', 'kangaroo', 'marionette', 'puppeteer', 'flagstock', 'sailor', 'portrait', 'direction', 'sponsor', 'fiancee', 'impression', 'inertia', 'pokerface', 'caterpillar', 'waterline', 'butterfly', 'healer'],
   now = Date.now(), create,
   length = words.length
   rows = []

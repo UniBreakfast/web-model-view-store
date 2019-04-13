@@ -26,10 +26,6 @@ body {
   align-items: center;
 }
 
-label {
-  justify-self: right;
-}
-
 input {
   font: var(--font);
   text-align: center;
@@ -38,10 +34,6 @@ input {
   border-radius: .3rem;
   border: 2px solid;
 }
-
-#view  { border-color: var(--view)  }
-#model { border-color: var(--model) }
-#store { border-color: var(--store) }
 
 [for=view ] { color: var(--view)  }
 [for=model] { color: var(--model) }
@@ -66,10 +58,22 @@ button, .btn {
   display: none;
 }
 
-#store {
+#store, #view {
   max-height: 30vh;
   overflow: auto;
+  border-radius: .3rem;
+  border: 2px solid;
 }
+::-webkit-scrollbar {
+  width: .4rem;
+}
+#view::-webkit-scrollbar-thumb  { background: var(--view)  }
+#store::-webkit-scrollbar-thumb { background: var(--store) }
+
+#view  { border-color: var(--view)  }
+#model { border-color: var(--model) }
+#store { border-color: var(--store) }
+
 #dbview input {
   font-size: .8rem;
   width: 10rem;
@@ -80,6 +84,22 @@ button, .btn {
 #dbview td:nth-child(6)>input { width: 4rem }
 #dbview td:nth-child(2)>input,
 #dbview td:nth-child(3)>input { width: 6rem }
+
+#viewtbl {
+  border-collapse: collapse;
+}
+#view td {
+  padding: .7rem 1.2rem;
+  text-align: center;
+}
+#view thead th{
+  padding: .3rem;
+  border-bottom: 2px solid darkgray;
+}
+#view tbody tr:nth-child(odd)  { background-color: #fff2 }
+#view tbody tr:nth-child(even) { background-color: #AAA1 }
+
+
 /*
 
 #alertbox {
@@ -106,19 +126,4 @@ button, .btn {
   border-radius: .3rem;
   border: 2px solid lightgray;
 }
- */
- #view td {
-     padding: 15px;
- }
-#view thead th{
-    padding: 10px;
-    vertical-align: middle;
-    background-color: lightgrey;
-    border-bottom: 1px solid darkgray;
-}
-#view tbody tr:nth-child(odd) {
-    background-color: #fff5;
-}
-#view tbody tr:nth-child(even) {
-    background-color: #0001;
-}
+*/

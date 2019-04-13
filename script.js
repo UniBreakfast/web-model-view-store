@@ -1,4 +1,16 @@
 
+v.setEl(viewtbl)
+v.setModel(m)
+m.setClerk(c)
+c.setDB(db)
+v.setPrep(data=> data.rows.map(row=>
+  [row[1]+' '+row[2], row[3], row[4], row[5]]))
+
+m.fetch()
+m.parse()
+v.prepare()
+v.render()
+
 db.headers.forEach(header=> headers.innerHTML+=`<th>${header}</th>`)
 db.rows.forEach(row=> dbtbody.innerHTML+=`<tr>${row.reduce((tr, td)=>
   tr+`<td><input value="${td}"></td>`,'')}</tr>`)
