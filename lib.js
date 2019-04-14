@@ -9,8 +9,8 @@ v = {
 }
 m = {
   setClerk(clerk) { this.clerk = clerk },
-  // fetch() { this.clerk.fetch(json=> this.json=json) },
-  fetch() { this.json = this.clerk.fetch() },
+  fetch(cb) { this.clerk.fetch(json=> {this.json=json; cb()}) },
+  // fetch() { this.json = this.clerk.fetch() },
   parse() { this.data = JSON.parse(this.json) },
   load() { },
 }
@@ -22,10 +22,25 @@ c = {
   fetch(cb, params) {
     if (this.fetchParams && params) params = {...this.fetchParams, ...params}
     else if (this.fetchParams) params = this.fetchParams
-    fetch(this.fetchPath+ (params? `${this.fetchPath}?${Object.entries(params)
+    fetch(this.fetchPath+ (params? `?${Object.entries(params)
       .map(([key,value])=>`${key}=${value}`).join('&')}` :''))
         .then(resp=>resp.text())
         .then(cb)
   },
-  fetch() { return JSON.stringify(this.db) }
+  // fetch() { return JSON.stringify(this.db) }
+}
+// function fetch(path) {
+//     let [fileName, params] = path.split('?')
+//     params = params.split('&')
+//     let obj = {}
+//     params.forEach(param=>{
+//         let [key, value] = param.split('=')
+//         obj[key] =  value
+//     })
+// }
+function fetch(path) {
+    let [fileName, params] = path.split('?')
+    params = params.split('&')
+    let arr = params.map(param=>param.split('='))
+    return arr.reduce((obj, [key, value])=> obj[key] = value, {})
 }
