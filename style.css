@@ -61,6 +61,7 @@ button, .btn {
   overflow: auto;
   border-radius: .3rem;
   border: 2px solid;
+  overflow-x: hidden;
 }
 #model {
   font-size: .8rem;
