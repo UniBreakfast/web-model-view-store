@@ -42,7 +42,7 @@ button, .btn {
   font: var(--font);
   margin: 1rem;
   padding: .5rem;
-  min-width: 15rem;
+  min-width: 8rem;
   border-radius: .3rem;
   color: white;
   text-decoration: none;
@@ -62,13 +62,14 @@ button, .btn {
   border-radius: .3rem;
   border: 2px solid;
 }
-::-webkit-scrollbar {
-  width: .4rem;
-}
 #model {
   font-size: .8rem;
   margin: 0;
 }
+::-webkit-scrollbar {
+  width: .5rem;
+}
+::-webkit-scrollbar-thumb { border-radius: .3rem}
 #view::-webkit-scrollbar-thumb  { background: var(--view)  }
 #model::-webkit-scrollbar-thumb { background: var(--model) }
 #store::-webkit-scrollbar-thumb { background: var(--store) }

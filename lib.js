@@ -9,11 +9,23 @@ v = {
 }
 m = {
   setClerk(clerk) { this.clerk = clerk },
+  // fetch() { this.clerk.fetch(json=> this.json=json) },
   fetch() { this.json = this.clerk.fetch() },
   parse() { this.data = JSON.parse(this.json) },
-  load() { }
+  load() { },
 }
 c = {
   setDB(db) { this.db = db },
+  setFetch(path) { this.fetchPath = path },
+  setPush(path) { this.pushPath = path },
+  setFetchParams(params) { this.fetchParams = params },
+  // fetch(cb, params) {
+  //   if (this.fetchParams && params) params = {...this.fetchParams, ...params}
+  //   else if (this.fetchParams) params = this.fetchParams
+  //   fetch(this.fetchPath+ (params? `${this.fetchPath}?${Object.entries(params)
+  //     .map(([key,value])=>`${key}=${value}`).join('&')}` :''))
+  //       .then(resp=>resp.text())
+  //       .then(cb)
+  // },
   fetch() { return JSON.stringify(this.db) }
 }

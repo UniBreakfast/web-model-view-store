@@ -6,6 +6,7 @@ c.setDB(db)
 v.setPrep(data=> data.rows.map(row=>
   [row[1]+' '+row[2], row[3], row[4], row[5]]))
 
+c.setFetch('db.json')
 m.fetch()
 m.parse()
 v.prepare()
