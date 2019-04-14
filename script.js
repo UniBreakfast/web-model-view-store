@@ -2,25 +2,26 @@
 v.setEl(viewtbl)
 v.setModel(m)
 m.setClerk(c)
-c.setDB(db)
 v.setPrep(data=> data.rows.map(row=>
   [row[1]+' '+row[2], row[3], row[4], row[5]]))
 
-c.setFetch('db.json')
+c.setFetch('get.json')
 m.fetch(procedure)
 function procedure(){
     m.parse()
     v.prepare()
     v.render()
-    showDB(m.data)
+    showDB()
     dbtbody.querySelectorAll('input').forEach(el=>el.onchange=dbCellChange)
     showModelData()
 }
 
-function showDB(db) {
+function showDB() {
   headers.innerHTML =
-    db.headers.reduce((html, header) => `${html}<th>${header}</th>`, '');
-  dbtbody.innerHTML = db.rows.reduce((html, row) => `${html}<tr>${row.reduce((tr, td) => `${tr}<td><input value="${td}"></td>`, '')}</tr>`, '');
+    db.data.headers.reduce((html, header) => `${html}<th>${header}</th>`, '');
+  dbtbody.innerHTML = db.data.rows.reduce((html, row) =>
+    `${html}<tr>${row.reduce((tr, td) =>
+      `${tr}<td><input value="${td}"></td>`, '')}</tr>`, '');
 }
 
 function dbCellChange() {
@@ -28,9 +29,9 @@ function dbCellChange() {
                 .indexOf(this.parentNode.parentNode),
         cell = [...this.parentNode.parentNode.children]
                 .indexOf(this.parentNode);
-  db.rows[row][cell] = this.value
+  db.data.rows[row][cell] = this.value
   this.parentNode.parentNode.children[7].children[0].value =
-    db.rows[row][7] = ISOdate(Date.now())
+    db.data.rows[row][7] = ISOdate(Date.now())
 }
 
 function showModelData() {
@@ -39,9 +40,9 @@ function showModelData() {
 
 refresh.onclick =()=> {
   m.fetch(()=>{
-      m.parse()
-      v.prepare()
-      v.render()
-      showModelData()
+    m.parse()
+    v.prepare()
+    v.render()
+    showModelData()
   })
 }

@@ -19,4 +19,28 @@ function peopleGen() {
   return {headers: ['id','first','last','age','word','score','dt_create','dt_modify'], rows}
 }
 
-db = peopleGen()
+db = { data: peopleGen() }
+
+db.get = function(params) {
+  return JSON.stringify(this.data)
+}
+
+
+// fake fetch to simulate working with the real backend db right in memory
+function fetch(url, wait=1000) {
+  let {path, params} = parsePath(url)
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      let response = {text: ()=>db[path](params)}
+      setTimeout(()=> resolve(response), wait)
+    }, wait)
+  })
+}
+
+function parsePath(url) {
+  let [path, params] = url.split('?')
+  path = path.split('.')[0]
+  params = params? params.split('&').map(param=>param.split('='))
+    .reduce((obj, [key, value])=> {obj[key] = value; return obj}, {}) :0
+  return params? {path, params} : {path}
+}
