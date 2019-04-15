@@ -34,6 +34,7 @@ c = {
   setFetch(path) { this.fetchPath = path },
   setPush(path) { this.pushPath = path },
   setFetchParams(params) { this.fetchParams = params },
+  fetchParams: { max: 60,  },
   fetch(cb, params) {
     if (this.fetchParams && params) params = {...this.fetchParams, ...params}
     else if (this.fetchParams) params = this.fetchParams

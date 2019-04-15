@@ -17,7 +17,8 @@ function procedure(){
     dbtbody.querySelectorAll('input').forEach(el=>{
       el.onchange=dbCellChange
       el.onkeydown =e=> { if (e.key=='Delete' && e.shiftKey) {
-        // e.target.dataset.row
+        db.data.rows = db.data.rows.filter(row=>row[0]-1!=+e.target.dataset.row)
+        e.target.parentNode.parentNode.remove()
       }}
     })
     showModelData()
