@@ -14,7 +14,12 @@ function procedure(){
     v.prepare()
     v.render()
     showDB()
-    dbtbody.querySelectorAll('input').forEach(el=>el.onchange=dbCellChange)
+    dbtbody.querySelectorAll('input').forEach(el=>{
+      el.onchange=dbCellChange
+      el.onkeydown =e=> { if (e.key=='Delete' && e.shiftKey) {
+        // e.target.dataset.row
+      }}
+    })
     showModelData()
 }
 
@@ -23,12 +28,17 @@ function showModelData() {
 }
 
 refresh.onclick =()=> {
+  let params = {}
+  if (m.data) {
+    if (m.data.rows.length) {
+      params.modify = m.data.rows.reduce((max,cur)=>max<cur[7]? cur[7]:max,'')
+      params.track = m.data.rows.map(row=>row[0]).join('.')
+    }
+  }
   m.fetch(()=>{
     m.parse()
     v.prepare()
     v.render()
     showModelData()
-  }, m.data&&m.data.rows.length?
-    {modify: m.data.rows.reduce((max,cur)=>max<cur[7]? cur[7]:max,'')}:{}
-  )
+  }, params)
 }

@@ -22,12 +22,20 @@ function peopleGen() {
 db = { data: peopleGen() }
 
 db.get = function(params={}) {
-  const { modify } = params,
-        { headers, rows } = this.data
-  if (modify)
-    return JSON.stringify({ headers, rows: rows.filter(row=>row[7]>modify)})
-  return JSON.stringify(this.data)
+  const { modify, track } = params,
+        { headers, rows } = this.data,
+        response = {}
+  if (track) {
+    var gone = track.split('.').filter(id=>!rows.map(row=>row[0]).includes(+id))
+    if (gone.length) response.gone = gone
+  }
+  if (modify) response.rows = rows.filter(row=>row[7]>modify)
+  else response.rows = rows
+  if (response.rows.length) response.headers = headers
+  else delete response.rows
+  return JSON.stringify(response)
 }
+
 db.set = function(params) {
   return JSON.stringify({ok:{id:4}})
 }
@@ -54,18 +62,14 @@ function parsePath(url) {
 
 function showDB() {
   headers.innerHTML =
-    db.data.headers.reduce((html, header) => `${html}<th>${header}</th>`, '');
-  dbtbody.innerHTML = db.data.rows.reduce((html, row) =>
-    `${html}<tr>${row.reduce((tr, td) =>
-      `${tr}<td><input value="${td}"></td>`, '')}</tr>`, '');
+    db.data.headers.reduce((html, header) => `${html}<th>${header}</th>`, '')
+  dbtbody.innerHTML = db.data.rows.reduce((html, row, j) =>
+    `${html}<tr>${row.reduce((tr, td, i) =>
+      `${tr}<td><input data-row=${j} data-cell=${i} value="${td}"></td>`, '')}</tr>`, '')
 }
 
 function dbCellChange() {
-  const row = [...this.parentNode.parentNode.parentNode.children]
-                .indexOf(this.parentNode.parentNode),
-        cell = [...this.parentNode.parentNode.children]
-                .indexOf(this.parentNode);
-  db.data.rows[row][cell] = this.value
+  db.data.rows[this.dataset.row][this.dataset.cell] = this.value
   this.parentNode.parentNode.children[7].children[0].value =
-    db.data.rows[row][7] = ISOdate(Date.now())
+    db.data.rows[this.dataset.row][7] = ISOdate(Date.now())
 }

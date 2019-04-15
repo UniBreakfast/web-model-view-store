@@ -5,6 +5,7 @@ v = {
   setSort(sorter) { this.sorter = sorter },
   sorter: (a,b)=>(a[0]>b[0])-.5,
   prepare() { this.data = this.prep(this.model.data) },
+  setRender(render) { this.render = render },
   render() {
     let data = this.data.sort(this.sorter).map(row=>row.slice(1))
     this.el.tBodies[0].innerHTML = data.reduce((str, row)=> str + `<tr>${row.reduce((str, cell)=> str + `<td>${cell}</td>`, '')}</tr>`, '')
@@ -17,11 +18,15 @@ m = {
     this.clerk.fetch(json=> {this.json=json; cb()}, params)
   },
   parse() {
-    const upd = JSON.parse(this.json)
-    this.data.headers = upd.headers
-    const ids = upd.rows.map(row=>row[0])
-    this.data.rows = this.data.rows.filter(row=>!ids.includes(row[0]))
-    this.data.rows.unshift(...upd.rows)
+    const { headers, rows, gone} = JSON.parse(this.json)
+    if (rows) {
+      this.data.headers = headers
+      const ids = rows.map(row=>row[0])
+      this.data.rows = this.data.rows.filter(row=>!ids.includes(row[0]))
+      this.data.rows.unshift(...rows)
+    }
+    if (gone) this.data.rows =
+      this.data.rows.filter(row=>!gone.includes(row[0]+''))
   },
   load() { },
 }
