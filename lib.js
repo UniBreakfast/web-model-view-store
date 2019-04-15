@@ -2,16 +2,27 @@ v = {
   setEl(el) { this.el = el },
   setModel(model) { this.model = model; model.view = this },
   setPrep(prep) { this.prep = prep },
+  setSort(sorter) { this.sorter = sorter },
+  sorter: (a,b)=>(a[0]>b[0])-.5,
   prepare() { this.data = this.prep(this.model.data) },
   render() {
-    this.el.tBodies[0].innerHTML = this.data.reduce((str, row)=> str + `<tr>${row.reduce((str, cell)=> str + `<td>${cell}</td>`, '')}</tr>`, '')
+    let data = this.data.sort(this.sorter).map(row=>row.slice(1))
+    this.el.tBodies[0].innerHTML = data.reduce((str, row)=> str + `<tr>${row.reduce((str, cell)=> str + `<td>${cell}</td>`, '')}</tr>`, '')
   }
 }
 m = {
   setClerk(clerk) { this.clerk = clerk },
-  fetch(cb) { this.clerk.fetch(json=> {this.json=json; cb()}) },
-  // fetch() { this.json = this.clerk.fetch() },
-  parse() { this.data = JSON.parse(this.json) },
+  setData(tplObj) { this.data = tplObj },
+  fetch(cb, params={}) {
+    this.clerk.fetch(json=> {this.json=json; cb()}, params)
+  },
+  parse() {
+    const upd = JSON.parse(this.json)
+    this.data.headers = upd.headers
+    const ids = upd.rows.map(row=>row[0])
+    this.data.rows = this.data.rows.filter(row=>!ids.includes(row[0]))
+    this.data.rows.unshift(...upd.rows)
+  },
   load() { },
 }
 c = {

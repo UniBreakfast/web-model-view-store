@@ -2,11 +2,13 @@
 v.setEl(viewtbl)
 v.setModel(m)
 m.setClerk(c)
+m.setData({headers:[],rows:[]})
 v.setPrep(data=> data.rows.map(row=>
-  [row[1]+' '+row[2], row[3], row[4], row[5]]))
+  [row[0], row[1]+' '+row[2], row[3], row[4], row[5]]))
 
 c.setFetch('get.json')
 m.fetch(procedure)
+
 function procedure(){
     m.parse()
     v.prepare()
@@ -14,24 +16,6 @@ function procedure(){
     showDB()
     dbtbody.querySelectorAll('input').forEach(el=>el.onchange=dbCellChange)
     showModelData()
-}
-
-function showDB() {
-  headers.innerHTML =
-    db.data.headers.reduce((html, header) => `${html}<th>${header}</th>`, '');
-  dbtbody.innerHTML = db.data.rows.reduce((html, row) =>
-    `${html}<tr>${row.reduce((tr, td) =>
-      `${tr}<td><input value="${td}"></td>`, '')}</tr>`, '');
-}
-
-function dbCellChange() {
-  const row = [...this.parentNode.parentNode.parentNode.children]
-                .indexOf(this.parentNode.parentNode),
-        cell = [...this.parentNode.parentNode.children]
-                .indexOf(this.parentNode);
-  db.data.rows[row][cell] = this.value
-  this.parentNode.parentNode.children[7].children[0].value =
-    db.data.rows[row][7] = ISOdate(Date.now())
 }
 
 function showModelData() {
@@ -44,5 +28,7 @@ refresh.onclick =()=> {
     v.prepare()
     v.render()
     showModelData()
-  })
+  }, m.data&&m.data.rows.length?
+    {modify: m.data.rows.reduce((max,cur)=>max<cur[7]? cur[7]:max,'')}:{}
+  )
 }

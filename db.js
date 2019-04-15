@@ -21,19 +21,26 @@ function peopleGen() {
 
 db = { data: peopleGen() }
 
-db.get = function(params) {
+db.get = function(params={}) {
+  const { modify } = params,
+        { headers, rows } = this.data
+  if (modify)
+    return JSON.stringify({ headers, rows: rows.filter(row=>row[7]>modify)})
   return JSON.stringify(this.data)
+}
+db.set = function(params) {
+  return JSON.stringify({ok:{id:4}})
 }
 
 
 // fake fetch to simulate working with the real backend db right in memory
-function fetch(url, wait=1000) {
+function fetch(url, wait=40) {
   let {path, params} = parsePath(url)
   return new Promise(resolve => {
     setTimeout(()=>{
-      let response = {text: ()=>db[path](params)}
-      setTimeout(()=> resolve(response), wait)
-    }, wait)
+      const resp = db[path](params), response = {text: ()=>resp}
+      setTimeout(()=> resolve(response), wait+resp.length/7)
+    }, wait+url.length)
   })
 }
 
@@ -43,4 +50,22 @@ function parsePath(url) {
   params = params? params.split('&').map(param=>param.split('='))
     .reduce((obj, [key, value])=> {obj[key] = value; return obj}, {}) :0
   return params? {path, params} : {path}
+}
+
+function showDB() {
+  headers.innerHTML =
+    db.data.headers.reduce((html, header) => `${html}<th>${header}</th>`, '');
+  dbtbody.innerHTML = db.data.rows.reduce((html, row) =>
+    `${html}<tr>${row.reduce((tr, td) =>
+      `${tr}<td><input value="${td}"></td>`, '')}</tr>`, '');
+}
+
+function dbCellChange() {
+  const row = [...this.parentNode.parentNode.parentNode.children]
+                .indexOf(this.parentNode.parentNode),
+        cell = [...this.parentNode.parentNode.children]
+                .indexOf(this.parentNode);
+  db.data.rows[row][cell] = this.value
+  this.parentNode.parentNode.children[7].children[0].value =
+    db.data.rows[row][7] = ISOdate(Date.now())
 }
