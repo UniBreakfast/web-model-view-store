@@ -17,8 +17,14 @@ function procedure(){
     dbtbody.querySelectorAll('input').forEach(el=>{
       el.onchange=dbCellChange
       el.onkeydown =e=> { if (e.key=='Delete' && e.shiftKey) {
+        const row = e.target.parentNode.parentNode
         db.data.rows = db.data.rows.filter(row=>row[0]-1!=+e.target.dataset.row)
-        e.target.parentNode.parentNode.remove()
+        const cellNum = [...row.children].indexOf(e.target.parentNode),
+        rowNum = [...row.parentNode.children].indexOf(row)
+        row.remove()
+        try{dbtbody.children[rowNum].children[cellNum].children[0].focus()}
+        catch{dbtbody.children[dbtbody.children.length-1]
+          .children[cellNum].children[0].focus()}
       }}
     })
     showModelData()
