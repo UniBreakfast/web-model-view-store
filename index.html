@@ -14,6 +14,7 @@
   <div id=main>
     <div id=view>
       <style>
+        * { box-sizing: border-box}
         #view {
           display: flex;
           flex-direction: column;
@@ -23,11 +24,64 @@
         }
         #rows {
           flex: 1 1 auto;
+        }
+        #allrows {
+          border-top: 1px solid;
+          border-bottom: 1px solid;
           overflow: auto;
         }
+        table {
+          border-collapse: collapse;
+        }
+        td, th { border: 1px solid }
+        ::-webkit-scrollbar {
+          width:6px;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: black;
+        }
       </style>
-      <div id=headers>headers</div>
-      <div id=rows>Lorem ipsum dolor sit,</div>
+      <table id=allheaders><thead><tr id=headers>
+        <th>column A</th>
+        <th>column B</th>
+        <th>column C</th>
+        <th>D</th>
+      </tr></thead></table>
+      <div id=allrows>
+        <table><tbody id=rows>
+          <tr><td>25</td><td>50</td><td>75</td><td>10000000</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+          <tr><td>25</td><td>50</td><td>75</td><td>100</td></tr>
+        </tbody></table>
+      </div>
+      <script>
+        function setWidths() {
+          let total = 0;
+          [...headers.children].forEach((th,i)=>{
+            let thWidth,tdWidth, td=rows.children[0].children[i]
+            th.removeAttribute('width'); td.removeAttribute('width')
+            if ((thWidth=th.offsetWidth)>(tdWidth=td.offsetWidth))
+                 td.width = tdWidth = thWidth
+            else th.width = thWidth = tdWidth
+            total += thWidth
+          })
+          allheaders.style.width = total+1+'px'
+          allrows.style.width = total+6+'px'
+        }
+        setWidths()
+      </script>
       <div id=toolbar>toolbar</div>
     </div>
   </div>
