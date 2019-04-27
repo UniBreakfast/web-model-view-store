@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MVCA</title>
+  <script>mur=console.log</script>
+  <script src=fakefetch.js></script>
+  <script src=clerk.js></script>
+  <script src=agent.js></script>
+  <style>
+    body {
+      display: flex;
+      font: 1rem Trebuchet MS, Helvetica, sans-serif;
+      height: 100vh;
+      margin: 0;
+    }
+    #viewholder {
+      margin: auto;
+      font-size: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div id=viewholder>data will be shown here</div>
+  <script>
+    mur('page loaded...')
+    agent.begin()
+  </script>
+  <script src=model.js></script>
+  <script src=view.js></script>
+  <script src=stuff.js></script>
+
+</body>
+</html>
