@@ -5,7 +5,7 @@ maleNames = [
 lastNames = [
   "Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin", "Thompson", "Garcia", "Martinez", "Robinson", "Clark", "Rodriguez", "Lewis", "Lee", "Walker", "Hall", "Allen", "Young", "Hernandez", "King", "Wright", "Lopez", "Hill", "Scott", "Green", "Adams", "Baker", "Gonzalez", "Nelson", "Carter", "Mitchell", "Perez", "Roberts", "Turner", "Phillips", "Campbell", "Parker", "Evans", "Edwards", "Collins", "Stewart", "Sanchez", "Morris", "Rogers", "Reed", "Cook", "Morgan", "Bell", "Murphy", "Bailey", "Rivera", "Cooper", "Richardson", "Cox", "Howard", "Ward", "Torres", "Peterson", "Gray", "Ramirez", "James", "Watson", "Brooks", "Kelly", "Sanders", "Price", "Bennett", "Wood", "Barnes", "Ross", "Henderson", "Coleman", "Jenkins", "Perry", "Powell", "Long", "Patterson", "Hughes", "Flores", "Washington", "Butler", "Simmons", "Foster", "Gonzales", "Bryant ", "Alexander", "Russell", "Griffin ", "Diaz", "Hayes"],
 cities = [
-  "Paris", "London", "Bangkok", "Singapore", "New York", "Kuala Lumpur", "Hong Kong", "Dubai", "Istanbul", "Rome", "Shanghai", "Los Angeles", "Las Vegas", "Miami", "Toronto", "Barcelona", "Dublin", "Amsterdam", "Moscow", "Cairo", "Prague", "Vienna", "Madrid", "San Francisco", "Vancouver", "Budapest", "Rio de Janeiro", "Berlin", "Tokyo", "Mexico City", "Buenos Aires", "St. Petersburg", "Seoul", "Athens", "Jerusalem", "Seattle", "Delhi", "Sydney", "Mumbai", "Munich", "Venice", "Florence", "Beijing", "Cape Town", "Washington D.C.", "Montreal", "Atlanta", "Boston", "Philadelphia", "Chicago", "San Diego", "Stockholm", "Cancún", "Warsaw", "Sharm el-Sheikh", "Dallas", "Hồ Chí Minh", "Milan", "Oslo", "Libson", "Punta Cana", "Johannesburg", "Antalya", "Mecca", "Macau", "Pattaya", "Guangzhou", "Kiev", "Shenzhen", "Bucharest", "Taipei", "Orlando", "Brussels", "Chennai", "Marrakesh", "Phuket", "Edirne", "Bali", "Copenhagen", "São Paulo", "Agra", "Varna", "Riyadh", "Jakarta", "Auckland", "Honolulu", "Edinburgh", "Wellington", "New Orleans", "Petra", "Melbourne", "Luxor", "Hà Nội", "Manila", "Houston", "Phnom Penh", "Zürich", "Lima", "Santiago", "Bogotá"],
+  "Paris", "London", "Bangkok", "Singapore", "New York", "Kuala Lumpur", "Hong Kong", "Dubai", "Istanbul", "Rome", "Shanghai", "Los Angeles", "Las Vegas", "Miami", "Toronto", "Barcelona", "Dublin", "Amsterdam", "Moscow", "Cairo", "Prague", "Vienna", "Madrid", "San Francisco", "Vancouver", "Budapest", "Rio de Janeiro", "Berlin", "Tokyo", "Mexico", "Buenos Aires", "St Petersburg", "Seoul", "Athens", "Jerusalem", "Seattle", "Delhi", "Sydney", "Mumbai", "Munich", "Venice", "Florence", "Beijing", "Cape Town", "Washington DC", "Montreal", "Atlanta", "Boston", "Philadelphia", "Chicago", "San Diego", "Stockholm", "Cancun", "Warsaw", "Sharm el-Sheikh", "Dallas", "Ho Chi Minh", "Milan", "Oslo", "Libson", "Punta Cana", "Johannesburg", "Antalya", "Mecca", "Macau", "Pattaya", "Guangzhou", "Kyiv", "Shenzhen", "Bucharest", "Taipei", "Orlando", "Brussels", "Chennai", "Marrakesh", "Phuket", "Edirne", "Bali", "Copenhagen", "São Paulo", "Agra", "Varna", "Riyadh", "Jakarta", "Auckland", "Honolulu", "Edinburgh", "Wellington", "New Orleans", "Petra", "Melbourne", "Luxor", "Ha Noi", "Manila", "Houston", "Phnom Penh", "Zurich", "Lima", "Santiago", "Bogota"],
 countries = [
   ["Afghanistan","AF"],["Albania","AL"],["Algeria","DZ"],["Angola","AO"],["Argentina","AR"],["Armenia","AM"],["Australia","AU"],["Austria","AT"],["Azerbaijan","AZ"],["Bahrain","BH"],["Bangladesh","BD"],["Barbados","BB"],["Belarus","BY"],["Belgium","BE"],["Bolivia","BO"],["Brazil","BR"],["Bulgaria","BG"],["Cambodia","KH"],["Cameroon","CM"],["Canada","CA"],["Chad","TD"],["Chile","CL"],["China","CN"],["Colombia","CO"],["Congo","CG"],["Croatia","HR"],["Cuba","CU"],["Denmark","DK"],["Dominica","DM"],["Ecuador","EC"],["Egypt","EG"],["Estonia","EE"],["Ethiopia","ET"],["Finland","FI"],["France","FR"],["Georgia","GE"],["Germany","DE"],["Greece","GR"],["Greenland","GL"],["Guinea","GN"],["Vatican","VA"],["Honduras","HN"],["Hong Kong","HK"],["Hungary","HU"],["Iceland","IS"],["India","IN"],["Indonesia","ID"],["Iran","IR"],["Iraq","IQ"],["Ireland","IE"],["Israel","IL"],["Italy","IT"],["Jamaica","JM"],["Japan","JP"],["Jordan","JO"],["Kazakhstan","KZ"],["Kenya","KE"],["Korea, North","KP"],["Korea, South","KR"],["Kuwait","KW"],["Latvia","LV"],["Lithuania","LT"],["Macedonia","MK"],["Madagascar","MG"],["Malaysia","MY"],["Malta","MT"],["Mexico","MX"],["Moldova","MD"],["Monaco","MC"],["Mongolia","MN"],["Morocco","MA"],["Mozambique","MZ"],["Namibia","NA"],["Nepal","NP"],["Netherlands","NL"],["New Zealand","NZ"],["Nicaragua","NI"],["Nigeria","NG"],["Norway","NO"],["Oman","OM"],["Pakistan","PK"],["Panama","PA"],["Paraguay","PY"],["Peru","PE"],["Philippines","PH"],["Poland","PL"],["Portugal","PT"],["Puerto Rico","PR"],["Qatar","QA"],["Romania","RO"],["Russia","RU"],["Samoa","WS"],["Saudi Arabia","SA"],["Senegal","SN"],["Serbia","CS"],["Singapore","SG"],["Slovakia","SK"],["Slovenia","SI"],["Somalia","SO"],["South Africa","ZA"],["Spain","ES"],["Sudan","SD"],["Sweden","SE"],["Switzerland","CH"],["Thailand","TH"],["Turkey","TR"],["Turkmenistan","TM"],["Uganda","UG"],["Ukraine","UA"],["United Arab Emirates","AE"],["United Kingdom","GB"],["United States","US"],["Uruguay","UY"],["Uzbekistan","UZ"],["Venezuela","VE"],["Viet Nam","VN"],["Zambia","ZM"],["Zimbabwe","ZW"]],
 sonnets = [
@@ -228,4 +228,58 @@ lorem = {
     return result
   }
 },
-a=1//id
+dtStr =date=> new Date(date.getTime()-(date.getTimezoneOffset()*60000))
+  .toISOString().replace('T',' ').slice(0,-5),
+rnd =(...args)=> {
+  const [arg1,arg2] = args
+  if (args.length==1) {
+    if (typeof arg1 == 'number')
+      return Math.floor(Math.random()*arg1)
+    if (Array.isArray(arg1)) return arg1[rnd(arg1.length)]
+    if (arg1==Date) return dtStr(new Date(rnd(Date.now())))
+    if (arg1 instanceof Date)
+      return dtStr(new Date(rnd(arg1.getTime(), Date.now())))
+    if (typeof arg1 == 'string')
+      return arg1.replace('YYYY',(d=rnd(Date).split(/[- :]/))[0])
+        .replace('MM', d[1]).replace('DD', d[2])
+  }
+  if (args.length==2) {
+    if (typeof arg1=='number' && typeof arg2=='number')
+      return Math.round(arg1+(arg2-arg1)*Math.random())
+    if (Array.isArray(arg1) || typeof arg1=='string' || arg1==Date) {
+      if (typeof arg2=='number')
+        return Array(arg2).fill(0).map(_=>rnd(arg1))
+      if (Array.isArray(arg2)) return rnd(arg1)+' '+rnd(arg2)
+    }
+  }
+  else return Math.random()
+},
+// rnd() == random decimal from 0 to 1
+// rnd(num) == random integer from 0 to num-1
+// rnd(num1, num2) == random ineger from num1 to num2
+// rnd(arr) == random el from arr
+// rnd(Date) == random ISO-datetime from 1970 to now
+// rnd('DD.MM.YYYY') == random date/time from 1970 to now in provided format
+// rnd(new Date(1234567890)) == random datetime between that date and now
+// rnd(arr, num) == array of num random els from arr
+// rnd(arr1, arr2) == string of random combination of some el from arr1 w el from arr2
+// rnd(Date, num) == array of num random datetimes from 1970 to now
+// rnd('DD.MM.YYYY', num) == array of num random dates/times from 1970 to now in provided format
+probability =percentage=> rnd(1,100)<=percentage,
+rndData =(cols=[3,20], rows=[100,500])=> {
+  if (typeof cols == 'number') cols = rnd(2,cols)
+  else cols = rnd(cols[0],cols[1])
+  if (typeof rows == 'number') rows = rnd(2,rows)
+  else rows = rnd(rows[0],rows[1])
+  const wIds = probability(80),
+
+}
+/*
+
+  id   name     age
+  1  John Snow   21
+
+  id  first  last   born
+  001  Joe   Peshi  1956
+
+*/
