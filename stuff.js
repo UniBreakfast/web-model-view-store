@@ -315,10 +315,8 @@ ids =num=> {
       .map((int,_,arr)=>(int+'').padStart(pad? (arr[num-1]+'').length:1,'0'))
     default:
       const letterSet = rnd(['a-z','A-Z','a-'+rnd('b-z'),'A-'+rnd('B-Z')]),
-      letters = rnd(letterSet,num).sort().reduce((obj,l)=>{
-        obj[l] = 1+(obj[l]||0);
-        return obj
-      }, {}),
+      letters = rnd(letterSet,num).sort().reduce((obj,l)=>
+        { obj[l] = 1+(obj[l]||0); return obj }, {}),
       chars = rnd([['-',''],['.',''],['(',')'],['[',']'],['','']])
       return Object.entries(letters)
         .map(([key,value])=>integers(1,value,rnd(10,100))
@@ -360,5 +358,3 @@ personsData = [
 
   ]
 ]
-
-Math.max(...makeArr(1000, _=>Math.max(...Object.values(obj = rnd('a-z',500).sort().reduce((obj,l)=>{obj[l] = 1+(obj[l]||0); return obj}, {})))))
