@@ -5,10 +5,10 @@ Jackson, M.
 Mr. Michael Jackson
 Mrs. Jackson, M.
 dr. M.Jackson
-Michael "Moonwalk" Jackson
-Michael Jackson aka "Moonwalk"
+Michael =Moonwalk= Jackson
+Michael Jackson aka :Moonwalk:
 
-Michael | Jackson
+mister | Michael | Jackson
 Moonwalk | Michael | Jackson
 Jackson | Michael
 Jackson | Michael | "Moonwalk"
@@ -22,8 +22,6 @@ c ником / с титулом / без
 имя сокращено / имя целиком
 
 ник вначале / ник в конце / ник в середине
-
-титул вначале / титул в конце
 
 с полом / без пола
 
