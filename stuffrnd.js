@@ -33,7 +33,7 @@ dtStd =date=> new Date(date.getTime()-(date.getTimezoneOffset()*60000))
   .toISOString().replace('T',' ').slice(0,-5),
 dtForm =(datetime,format)=> {
   const [YYYY,MM,DD,HH,mm,ss] = datetime.split(/[- :]/)
-  return format.replace('YYYY',YYYY)
+  return format.replace('YYYY',YYYY).replace('YY',YYYY.substring(2))
     .replace('DDth', nth(DD))
     .replace('Month', months[MM-1]).replace('MM',MM)
     .replace('month', monthShorts[MM-1]).replace('DD',DD)
@@ -60,6 +60,8 @@ rnd =(...args)=> {
       return Math.round(arg1+(arg2-arg1)*Math.random())
     if (typeof arg2=='number') return makeArr(arg2,_=>rnd(arg1))
     if (Array.isArray(arg2)) return rnd(arg1)+' '+rnd(arg2)
+    if (arg2 instanceof Date)
+      return dtStd(new Date(rnd(arg1.getTime(), arg2.getTime())))
   }
   return Math.random()
 },
@@ -98,7 +100,7 @@ ids =num=> {
           ? (int+'').padStart((num+'').length+more,'0'):int)+chars[1])).flat()
   }
 },
-namesGend =(num)=> {
+namesGend =num=> {
   const males = rnd(30,70),
         joined = probably(40),
         titleNick = rnd(3),
@@ -160,6 +162,43 @@ namesGend =(num)=> {
     return row
   })]
 },
+birthAge =num=> {
+  let birthdays = makeArr(num,_=>rnd(new Date('1950'),new Date('2000')))
+  const needAge = rnd(6),
+        year = 365.25*864e5
+        needBD  = needAge? rnd(3) :1,
+        dtFormat = needBD? rnd(['YYYY-MM-DD','DD.MM.YYYY','DD.MM.YY',
+                          'MM/DD/YY',"DD month 'YY",'DDth of Month, YYYY',
+                          'Month DDth, YYYY']) :0,
+        ages = needAge? birthdays.map(dt=>
+          Math.floor((Date.now()-(new Date(dt)).getTime())/year)) :0
+  birthdays = needBD? birthdays.map(dt=>dtForm(dt,dtFormat)) :0
+  return [[needAge? 'age':0, needBD? rnd(['born','date of birth','born on',
+    'd.o.b.','birthday']):0].filter(s=>s),
+    renest([needAge? ages:0, needBD? birthdays:0].filter(s=>s))]
+},
+colouring =num=> {
+  if (rnd(3)) return [[rnd(['color','favorite color','selected color',
+    'preferred color','color preference','color key'])],
+    renest([rnd(colors,num)])]
+  else return [rnd([['primary color','secondary color'],['main color',
+    'accent color'],['1st color','2nd color'],['first color','second color'],
+    ['color 1','color 2']]), renest([rnd(colors,num),rnd(colors,num)])]
+},
+makePoints =()=> {
+  const max=rnd(1,12)*10
+  return Math.min(rnd(1,max*1.7),max)+'/'+max
+},
+hitsManaStamina =num=> {
+  const hp = rnd(['life','hitpoints']), mana = rnd(['mana','magicka']),
+        preset = rnd(5), headers = [], columns = []
+  if (preset) headers.push(hp) && columns.push(makeArr(num,makePoints))
+  if (preset==2 || preset==3)
+    headers.push(mana) && columns.push(makeArr(num,makePoints))
+  if ([0,1,2].includes(preset))
+    headers.push('stamina') && columns.push(makeArr(num,makePoints))
+  return [headers,renest(columns)]
+},
 schemas = {
   persons: []
 },
@@ -188,9 +227,43 @@ person
 
 */
 
-personsData = [
-  ['id','name','age','gender'],
-  [
+persons =num=> {
+  let result = []
+  const names = namesGend(num),
+        titled = names[1][0].reduce((titled,el)=> titled?true : !!el
+                  .match(/mr\.|mrs\.|miss|dr\./i),0),
+        wIds = rnd(5),
+        wCreature = rnd(5),
+        wColor = rnd(5),
+        rColors = wColor? colouring(num) :0,
+        wBirthAge = rnd(5),
+        wPoints = !titled&&wCreature? rnd(5) :0,
+        rPoints = wPoints? hitsManaStamina(num) :0,
+        wQuote = rnd(5),
+        rAnimals = titled&&wCreature? [[rnd(['animal','totem',
+          'totem animal','chosen animal'])],[rnd(animals,num)]] :0,
+        rCreatures = !titled&&wCreature? [[rnd(['familiar','creature',
+          'character','playing character'])],[makeArr(num,_=>
+            rnd(elements,creatures),1)]] :0,
+        rCreatures2 = rCreatures&&rCreatures[0][0]=='playing character'?
+          [['reserve character'],[makeArr(num,_=>
+            rnd(elements,creatures),1)]] :0
 
-  ]
-]
+  if (wIds) result.push([['id'],[ids(num)]])
+  result.push([names[0],renest(names[1])])
+  if (wBirthAge) {
+    const birth_age = birthAge(num)
+    result.push([birth_age[0],renest(birth_age[1])])
+  }
+  if (wColor) result.push([rColors[0],renest(rColors[1])])
+  if (wCreature) result.push(titled? rAnimals : rCreatures)
+  if (rCreatures2) result.push(rCreatures2)
+  if (wPoints) result.push([rPoints[0],renest(rPoints[1])])
+  result = renest(result)
+  result = result.map(arr=>arr.flat())
+  result[1] = renest(result[1])
+  return result
+}
+// console.table(recordsFrom(makeArr(10000,_=>persons(3)).reduce((max,cur)=>max[0].length>cur[0].length? max:cur, [[]])))
+// console.table(makeArr(10000,_=>persons(3)).reduce((counts,cur)=>{const count=''+cur[0].length;counts[count]=counts[count]?counts[count]+1:1;return counts},{}))
+// JSON.stringify(makeArr(10000,_=>persons(3)).reduce((counts,cur)=>{const count=''+cur[0].length;counts[count]=counts[count]?counts[count]+1:1;return counts},{}))
