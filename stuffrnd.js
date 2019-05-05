@@ -11,6 +11,11 @@ recordsFrom =data=> {
     return obj
   })
 },
+contbl =data=> {
+  if (typeof data[0][0]=='string' && Array.isArray(data[1][0]))
+    console.table(recordsFrom(data))
+  else console.table(recordsFrom([Array(data[0].length).fill(0).map((_,i)=>`column${i+1}`),data]))
+} ,
 makeArr =(length, func, distinct, persist)=> {
   if (distinct) {
     for (var set = new Set(), i=0, max = persist? Infinity:100000;
@@ -29,6 +34,7 @@ nth =day=> {
     default: return +day+'th'
   }
 },
+csNum =num=> (num+'').replace(/\B(?=(\d{3})+(?!\d))/g, ","),
 dtStd =date=> new Date(date.getTime()-(date.getTimezoneOffset()*60000))
   .toISOString().replace('T',' ').slice(0,-5),
 dtForm =(datetime,format)=> {
@@ -53,7 +59,16 @@ rnd =(...args)=> {
         return String.fromCharCode(rnd(arg1.charCodeAt(0),arg1.charCodeAt(2)))
       return dtForm(rnd(Date), arg1)
     }
-
+    if (typeof arg1 == 'object') {
+      const max = Object.values(arg1).reduce((sum,num)=>sum+num),
+            entries = Object.entries(arg1)
+      let value;
+      for (let num=rnd(max), i=0; num>=0; i++) {
+        value=entries[i][0]
+        num-=entries[i][1]
+      }
+      return value
+    }
   }
   if (args.length==2) {
     if (typeof arg1=='number' && typeof arg2=='number')
@@ -76,6 +91,8 @@ rnd =(...args)=> {
 // rnd(arr1, arr2) == string of random combination of some el from arr1 w el from arr2
 // rnd(Date, num) == array of num random datetimes from 1970 to now
 // rnd('DD.MM.YYYY', num) == array of num random dates/times from 1970 to now in provided format
+countDistinct =arr=>
+  arr.reduce((obj,el)=>{obj[el]=obj[el]? obj[el]+1:1; return obj},{})
 probably =percentage=> +(rnd(1,100)<=percentage),
 integers =(start, length, density=100)=> {
   for (var arr=[]; arr.length<length; start++) {
@@ -177,6 +194,17 @@ birthAge =num=> {
     'd.o.b.','birthday']):0].filter(s=>s),
     renest([needAge? ages:0, needBD? birthdays:0].filter(s=>s))]
 },
+origins =num=> {
+  const preset=rnd(4), city=preset, country=3-preset, joined=preset==1,
+        both=city&&country, city1st=both?rnd(2):0
+  if (joined) return [[rnd(['origin','residence','where from','city, country',
+    'from'])], makeArr(num,_=>
+      { const pair=rnd(cities); return [`${pair[0]}, ${pair[1]}`]})]
+  if (city1st) return [['city','country'], makeArr(num,_=>rnd(cities))]
+  if (both) return [['country','city'], makeArr(num,_=>rnd(cities).reverse())]
+  if (city) return [[rnd(['city','from'])], makeArr(num,_=>[rnd(cities)[0]])]
+  else return [[rnd(['country','from'])], makeArr(num,_=>[rnd(cities)[1]])]
+}
 colouring =num=> {
   if (rnd(3)) return [[rnd(['color','favorite color','selected color',
     'preferred color','color preference','color key'])],
@@ -189,6 +217,8 @@ makePoints =()=> {
   const max=rnd(1,12)*10
   return Math.min(rnd(1,max*1.7),max)+'/'+max
 },
+familiars =(num,distinct)=>
+  makeArr(num,_=> rnd(elements,creatures),distinct)
 hitsManaStamina =num=> {
   const hp = rnd(['life','hitpoints']), mana = rnd(['mana','magicka']),
         preset = rnd(5), headers = [], columns = []
@@ -199,10 +229,33 @@ hitsManaStamina =num=> {
     headers.push('stamina') && columns.push(makeArr(num,makePoints))
   return [headers,renest(columns)]
 },
-schemas = {
-  persons: []
+quoting =num=> [[rnd(['motto','creed','code prase','quote'])],
+  makeArr(num,_=>[rnd(rnd(sonnets))
+    .replace(/[,?;:]$|\.\.\.$|--$/,rnd(['.','!']))])]
+makeAmount =max=> csNum(rnd(1000)* 10**rnd(((max||1000)/100+'').length)+''),
+scoring =num=> {
+  const score = rnd(['score','points total']),
+        games = rnd(['rounds won','battles won']),
+        preset = rnd(5), headers = [], columns = []
+  if (preset)
+    headers.push(score) && columns.push(makeArr(num,_=>makeAmount(1e7)))
+  if ([0,1,2].includes(preset)) headers.push(games) &&
+    columns.push(makeArr(num,_=>rnd([rnd(1),rnd(50),rnd(300),rnd(1000)])))
+  if (preset==2 || preset==3) headers.push('tries before quitting') &&
+    columns.push(makeArr(num,_=>rnd([1,2,3,rnd(4,70),rnd(4,400)])))
+  return [headers,renest(columns)]
 },
-
+accounting =num=> {
+  const preset = rnd(5), headers = [], columns = []
+  if (preset) headers.push('balance') &&
+    columns.push(makeArr(num,_=>'$'+[0,makeAmount(1e5)][probably(92)]+'.00'))
+  if ([0,1,2].includes(preset)) headers.push('income','spendings') &&
+    columns.push(makeArr(num,_=>'+$'+[0,makeAmount(1e2)][probably(83)]+'.00'),
+                 makeArr(num,_=>'-$'+[0,makeAmount(1e2)][probably(83)]+'.00'))
+  if (preset==2 || preset==3) headers.push('debt') &&
+    columns.push(makeArr(num,_=>'$'+[makeAmount(1e2),0][probably(77)]+'.00'))
+  return [headers,renest(columns)]
+},
 rndData =(cols=[3,20], rows=[100,500])=> {
   if (typeof cols == 'number') cols = rnd(2,cols)
   else cols = rnd(cols[0],cols[1])
@@ -215,31 +268,20 @@ rndData =(cols=[3,20], rows=[100,500])=> {
   const wIds = probably(80)
 
 },
-
-/*
-
-person
-    name   age gender date_of_birth
-  John Snow 21  male  June 12, 1980
-
-  id  first  last   born
-  001  Joe   Peshi  1956
-
-*/
-
 persons =num=> {
   let result = []
   const names = namesGend(num),
         titled = names[1][0].reduce((titled,el)=> titled?true : !!el
                   .match(/mr\.|mrs\.|miss|dr\./i),0),
         wIds = rnd(5),
-        wCreature = rnd(5),
+        wBirthAge = rnd(5),
+        wOrigin = rnd(5),
+        rOrigin = wOrigin? origins(num) :0,
         wColor = rnd(5),
         rColors = wColor? colouring(num) :0,
-        wBirthAge = rnd(5),
+        wCreature = rnd(5),
         wPoints = !titled&&wCreature? rnd(5) :0,
         rPoints = wPoints? hitsManaStamina(num) :0,
-        wQuote = rnd(5),
         rAnimals = titled&&wCreature? [[rnd(['animal','totem',
           'totem animal','chosen animal'])],[rnd(animals,num)]] :0,
         rCreatures = !titled&&wCreature? [[rnd(['familiar','creature',
@@ -247,7 +289,11 @@ persons =num=> {
             rnd(elements,creatures),1)]] :0,
         rCreatures2 = rCreatures&&rCreatures[0][0]=='playing character'?
           [['reserve character'],[makeArr(num,_=>
-            rnd(elements,creatures),1)]] :0
+            rnd(elements,creatures),1)]] :0,
+        wQuote = rnd(5),
+        rQuote = wQuote? quoting(num) :0,
+        wStatus = rnd(2),
+        rStatus = [['status'],[rnd({'':9,'active':3,'inactive':1,'left':1,'done':2,'quit':1,'deceased':1},num)]]
 
   if (wIds) result.push([['id'],[ids(num)]])
   result.push([names[0],renest(names[1])])
@@ -255,10 +301,17 @@ persons =num=> {
     const birth_age = birthAge(num)
     result.push([birth_age[0],renest(birth_age[1])])
   }
+  if (wOrigin) result.push([rOrigin[0],renest(rOrigin[1])])
+  if (wStatus) result.push(rStatus)
   if (wColor) result.push([rColors[0],renest(rColors[1])])
   if (wCreature) result.push(titled? rAnimals : rCreatures)
   if (rCreatures2) result.push(rCreatures2)
   if (wPoints) result.push([rPoints[0],renest(rPoints[1])])
+  if (rQuote) result.push([rQuote[0],renest(rQuote[1])])
+  // dtCreate/dtModify
+  // Score
+  // Account
+  // City/Country
   result = renest(result)
   result = result.map(arr=>arr.flat())
   result[1] = renest(result[1])
