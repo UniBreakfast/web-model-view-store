@@ -229,7 +229,7 @@ hitsManaStamina =num=> {
     headers.push('stamina') && columns.push(makeArr(num,makePoints))
   return [headers,renest(columns)]
 },
-quoting =num=> [[rnd(['motto','creed','code prase','quote'])],
+quoting =num=> [[rnd(['motto','creed','code phrase','quote'])],
   makeArr(num,_=>[rnd(rnd(sonnets))
     .replace(/[,?;:]$|\.\.\.$|--$/,rnd(['.','!']))])]
 makeAmount =max=> csNum(rnd(1000)* 10**rnd(((max||1000)/100+'').length)+''),
@@ -255,6 +255,14 @@ accounting =num=> {
   if (preset==2 || preset==3) headers.push('debt') &&
     columns.push(makeArr(num,_=>'$'+[makeAmount(1e2),0][probably(77)]+'.00'))
   return [headers,renest(columns)]
+},
+createModify =num=> {
+  const year = 365.25*864e5
+  return [['created','modified'],makeArr(num,_=>{
+    const created = rnd(year)
+    return [rnd(new Date(Date.now()-created)),
+            rnd(new Date(Date.now()-rnd(created)))]
+  })]
 },
 rndData =(cols=[3,20], rows=[100,500])=> {
   if (typeof cols == 'number') cols = rnd(2,cols)
@@ -293,7 +301,17 @@ persons =num=> {
         wQuote = rnd(5),
         rQuote = wQuote? quoting(num) :0,
         wStatus = rnd(2),
-        rStatus = [['status'],[rnd({'':9,'active':3,'inactive':1,'left':1,'done':2,'quit':1,'deceased':1},num)]]
+        rStatus = [['status'],[rnd({'':9,'active':3,'inactive':1,'left':1,'done':2,'quit':1,'deceased':1},num)]],
+        wAmount = rnd(5),
+        rAmount = !wAmount? 0: (titled? accounting(num) : scoring(num)),
+        wCreateModify = rnd(7),
+        rCreateModify = wCreateModify? createModify(num) :0,
+        wLoremS = rnd(3),
+        rLoremS = wLoremS? [['spell','proverb'][+titled], makeArr(num,_=>
+          [lorem.sentence(2,22)])] :0,
+        wLoremP = !rnd(5),
+        rLoremP = wLoremP? [[rnd(['character bio','story']),rnd(['details',
+          'description'])][+titled],makeArr(num,_=>[lorem.paragraph(22,222)])]:0
 
   if (wIds) result.push([['id'],[ids(num)]])
   result.push([names[0],renest(names[1])])
@@ -308,10 +326,10 @@ persons =num=> {
   if (rCreatures2) result.push(rCreatures2)
   if (wPoints) result.push([rPoints[0],renest(rPoints[1])])
   if (rQuote) result.push([rQuote[0],renest(rQuote[1])])
-  // dtCreate/dtModify
-  // Score
-  // Account
-  // City/Country
+  if (wAmount) result.push([rAmount[0],renest(rAmount[1])])
+  if (wLoremS) result.push([rLoremS[0],renest(rLoremS[1])])
+  if (wLoremP) result.push([rLoremP[0],renest(rLoremP[1])])
+  if (wCreateModify) result.push([rCreateModify[0],renest(rCreateModify[1])])
   result = renest(result)
   result = result.map(arr=>arr.flat())
   result[1] = renest(result[1])
