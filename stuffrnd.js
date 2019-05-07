@@ -46,6 +46,7 @@ dtForm =(datetime,format)=> {
     .replace('HH',HH).replace('mm',mm).replace('ss',ss)
 },
 rnd =(...args)=> {
+  // rnd.counter = rnd.counter? rnd.counter+1:1
   const [arg1,arg2] = args
   if (args.length==1) {
     if (typeof arg1 == 'number')
@@ -231,7 +232,7 @@ hitsManaStamina =num=> {
 },
 quoting =num=> [[rnd(['motto','creed','code phrase','quote'])],
   makeArr(num,_=>[rnd(rnd(sonnets))
-    .replace(/[,?;:]$|\.\.\.$|--$/,rnd(['.','!']))])]
+    .replace(/[,?;:!\.]$|\.\.\.$|--$/,'')+rnd({'.':12,'!':3,'?':1})])]
 makeAmount =max=> csNum(rnd(1000)* 10**rnd(((max||1000)/100+'').length)+''),
 scoring =num=> {
   const score = rnd(['score','points total']),
